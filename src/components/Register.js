@@ -14,16 +14,11 @@ function Register({onRegister}) {
     setPassword(evt.target.value);
   }
 
-  function resetRegForm(){
-    setEmail('');
-    setPassword('')
-  }
-
+  
   function handleSubmit(evt){
     evt.preventDefault();
 
-    onRegister(password, email);
-    resetRegForm()
+    onRegister(password, email);    
   }
 
   return (

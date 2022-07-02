@@ -13,16 +13,9 @@ function Login({onLogin}) {
     setPassword(evt.target.value);
   }
 
-  function resetRegForm(){
-    setEmail('');
-    setPassword('')
-  }
-
-
   function handleSubmit(evt){
     evt.preventDefault();
-    onLogin(password, email);
-    resetRegForm()
+    onLogin(password, email);   
   }
 
   return (

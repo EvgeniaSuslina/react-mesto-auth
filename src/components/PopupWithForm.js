@@ -20,7 +20,7 @@ function PopupWithForm({
           type="button"
           className="popup__close popup__close_type_edit"
           onClick={onClose}
-        ></button>
+          />
         <h3 className="popup__title">{title}</h3>
         {children}
         <button

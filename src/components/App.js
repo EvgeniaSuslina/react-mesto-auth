@@ -103,9 +103,11 @@ function handleCathErr(err){
 
      auth.register(password, email)
      .then((res)=>{
-      if(res.statusCode !== 400){
+      if(res.data !== 400){
         history.push('/sign-in')
         handleInfoTooltipClick(true)
+      }else{
+        setMessageInfoTooltip('Что-то пошло не так! Попробуйте ещё раз.');
       }      
      })
      .catch((err)=>{
@@ -130,7 +132,7 @@ function handleCathErr(err){
     .catch((err)=>{
       handleCathErr(err);
       handleInfoTooltipClick(false);
-      setMessageInfoTooltip('Что-то пошло не так! Попробуйте ещё раз.');
+      setMessageInfoTooltip(err);
      })
   }
 
@@ -140,20 +142,21 @@ function handleCathErr(err){
 
 
   //проверка токена
-  function checkToken(){
-    if(localStorage.token){ 
-      const token = localStorage.getItem('token');     
-      auth.getContent(token)
-      .then((res)=>{        
-        setLoggedIn(true);
-        setUserEmail(res.data.email);
-        history.push('/');              
-      })
-      .catch((err)=>{
-        handleCathErr(err)
-       })
+  function checkToken() {
+    const token = localStorage.getItem('token');
+    if (token) {
+      auth
+        .getContent(token)
+        .then(res => {
+          setLoggedIn(true);
+          setUserEmail(res.data.email);
+          history.push('/');
+        })
+        .catch(err => {
+          handleCathErr(err);
+        });
     }
-  }
+  } 
 
   //выход из системы
   function handleLogout(){
