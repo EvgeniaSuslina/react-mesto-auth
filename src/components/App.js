@@ -103,7 +103,7 @@ function handleCathErr(err){
 
      auth.register(password, email)
      .then((res)=>{
-      if(res.data !== 400){
+      if(res.data){
         history.push('/sign-in')
         handleInfoTooltipClick(true)
       }else{

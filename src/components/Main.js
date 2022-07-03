@@ -16,11 +16,11 @@ function Main({
   return (
     <main>
       <section className="profile">
-        <div className="profile__ava-change" onClick={onEditAvatar}>
+        <div className="profile__ava-change" onClick={onEditAvatar}>          
           <img
             className="profile__avatar"
             src={currentUser.avatar}
-            alt="Аватар"
+            alt="Аватар"            
           />
         </div>
         <div className="profile__info">
