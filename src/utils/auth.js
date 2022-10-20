@@ -8,19 +8,22 @@ export const BASE_URL = 'https://api.evgenias.mesto.nomoredomains.icu';
     }
   }
 
-  export function register(password, email){
-    return fetch(`${BASE_URL}/signup`,{
+  export function register(email, password){
+    return fetch(`${BASE_URL}/signup`, {
         method: 'POST',
         headers: {          
           'Content-Type': 'application/json'
         }, 
-        body: JSON.stringify({password, email})
+        body: JSON.stringify({
+          "password": password,
+          "email": email
+        })
     })
     .then(checkResult);
   }
 
   
-  export function authorize(password, email){
+  export function authorize(email, password){
     return fetch(`${BASE_URL}/signin`,{
         method: 'POST',
         headers: {          

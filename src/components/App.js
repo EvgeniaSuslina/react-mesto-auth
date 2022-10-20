@@ -99,17 +99,13 @@ function handleCathErr(err){
 }
 
 //регистрация пользователя
-  function handleRegister(password, email){
+  function handleRegister(email, password){
 
-     auth.register(password, email)
-     .then((res)=>{
-      if(res.data){
+     auth.register(email, password)
+     .then(() => {
         history.push('/sign-in')
         handleInfoTooltipClick(true)
-      }else{
-        setMessageInfoTooltip('Что-то пошло не так! Попробуйте ещё раз.');
-      }      
-     })
+      })     
      .catch((err)=>{
       handleCathErr(err);
       handleInfoTooltipClick(false);
@@ -118,9 +114,9 @@ function handleCathErr(err){
   }
 
   //вход в систему
-  function handleLogin(password, email){
+  function handleLogin(email, password){
 
-    auth.authorize(password, email)
+    auth.authorize(email, password)
     .then((res)=>{
       if(res.token){        
         localStorage.setItem('token', res.token);

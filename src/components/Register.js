@@ -18,7 +18,7 @@ function Register({onRegister}) {
   function handleSubmit(evt){
     evt.preventDefault();
 
-    onRegister(password, email);    
+    onRegister(email, password);    
   }
 
   return (
