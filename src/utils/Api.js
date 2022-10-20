@@ -103,9 +103,8 @@ class Api {
 
 //создание экземпляра класса Api
 const api = new Api({
-    url: 'https://mesto.nomoreparties.co/v1/cohort-40',
-    headers: {
-      authorization: '9484ac81-4ff0-44be-950c-3006408ead7d',
+    url: 'https://api.evgenias.mesto.nomoredomains.icu',
+    headers: {      
       'Content-type': 'application/json'
     }
   });
