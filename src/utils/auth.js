@@ -24,7 +24,7 @@ export const BASE_URL = 'https://api.evgenias.mesto.nomoredomains.icu';
 
   
   export function authorize(email, password){
-    return fetch(`${BASE_URL}/signin`,{
+    return fetch(`${BASE_URL}/signin`, {
         method: 'POST',
         headers: {          
           'Content-Type': 'application/json'

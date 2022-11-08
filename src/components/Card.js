@@ -5,15 +5,10 @@ function Card({ card, onCardClick, onCardLike, onCardDelete}) {
 
 const currentUser = useContext(CurrentUserContext);
 
-// Определяем, являемся ли мы владельцем текущей карточки
 const isOwn = card.owner._id === currentUser._id;
-// Создаём переменную, которую после зададим в `className` для кнопки удаления
 const cardDeleteButtonClassName = (
-  `group__element-trash ${isOwn ? 'group__element-trash' : 'group__element-trash-hide'}`); 
- 
-// Определяем, есть ли у карточки лайк, поставленный текущим пользователем
+  `group__element-trash ${isOwn ? 'group__element-trash' : 'group__element-trash-hide'}`);  
 const isLiked = card.likes.some(i => i._id === currentUser._id);
-// Создаём переменную, которую после зададим в `className` для кнопки лайка
 const cardLikeButtonClassName = (
 `group__element-like ${isLiked ? 'group__element-like_liked': 'group__element-like'}`); 
 

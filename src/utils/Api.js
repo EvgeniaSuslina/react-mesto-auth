@@ -98,13 +98,19 @@ class Api {
       })
       .then(this._checkResult);
     }
-    
-  }  
 
-//создание экземпляра класса Api
+    updateTokenInHeaders() {
+      this._headers = {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Content-Type': 'application/json'
+      }
+  }
+}
+
 const api = new Api({
     url: 'https://api.evgenias.mesto.nomoredomains.icu',
-    headers: {      
+    headers: {
+      'Authorization': `Bearer ${localStorage.getItem('token')}`,
       'Content-type': 'application/json'
     }
   });

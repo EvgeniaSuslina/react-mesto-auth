@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Route, Switch, Link, useHistory } from 'react-router-dom';
+import { Route, Switch, useHistory } from 'react-router-dom';
 
 import api from "../utils/Api.js";
 import Header from "./Header";
@@ -35,17 +35,30 @@ function App() {
   const [messageInfoTooltip, setMessageInfoTooltip] = useState({});
   const history = useHistory();
 
-
   useEffect(() => {
-    Promise.all([api.getUserInfo(), api.getInitialCards()])
-      .then(([userData, cardsData]) => {
-        setCurrentUser(userData);
-        setCards(cardsData);
-      })
+    checkToken();
+}, []);
+
+useEffect(() => {
+  if (!loggedIn) {
+      return;
+  }
+
+  api.updateTokenInHeaders();
+
+  api.getUserInfo()
+      .then(setCurrentUser)
       .catch((err) => {
-        console.log(err);
+        handleCathErr(err);
       });
-  }, []);
+
+  api.getInitialCards()
+      .then(setCards)
+      .catch((err) => {
+        handleCathErr(err);
+      });
+}, [loggedIn]);
+
 
   function handleInfoTooltipClick(login){
    login ? setLoggedIn(true) : setLoggedIn(false);
@@ -115,14 +128,14 @@ function handleCathErr(err){
 
   //вход в систему
   function handleLogin(email, password){
+    setIsLoading(true);
 
     auth.authorize(email, password)
     .then((res)=>{
       if(res.token){        
         localStorage.setItem('token', res.token);
         setLoggedIn(true);
-        setUserEmail(email)
-        history.push('/');
+        setUserEmail(email);        
       }
     })    
     .catch((err)=>{
@@ -130,35 +143,35 @@ function handleCathErr(err){
       handleInfoTooltipClick(false);
       setMessageInfoTooltip(err);
      })
+     .finally(()=>{
+      setIsLoading(false);
+      history.push('/');
+     })
   }
 
-  useEffect(() => {
-    checkToken();
-}, []);
-
-
-  //проверка токена
-  function checkToken() {
+//проверка токена
+function checkToken() {
+  if(localStorage.getItem('token')) {
     const token = localStorage.getItem('token');
-    if (token) {
-      auth
-        .getContent(token)
-        .then(res => {
-          setLoggedIn(true);
-          setUserEmail(res.data.email);
-          history.push('/');
-        })
-        .catch(err => {
-          handleCathErr(err);
-        });
-    }
-  } 
+    auth.getContent(token)
+    .then((res) => {
+      setLoggedIn(true);
+      setUserEmail(res.email);
+      history.push('/');
+    })
+    .catch(err => {
+      handleCathErr(err);
+    });
+  }
+}
 
   //выход из системы
   function handleLogout(){
     localStorage.removeItem('token');
     setLoggedIn(false);
     setUserEmail('');
+    setCurrentUser({});
+    setCards([]);
     history.push('/sign-in')
   }
 
