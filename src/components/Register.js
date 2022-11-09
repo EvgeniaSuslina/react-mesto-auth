@@ -13,7 +13,6 @@ function Register({onRegister}) {
   function handlePasswordChange(evt){
     setPassword(evt.target.value);
   }
-
   
   function handleSubmit(evt){
     evt.preventDefault();

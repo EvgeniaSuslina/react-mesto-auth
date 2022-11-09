@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Route, Switch, useHistory } from 'react-router-dom';
+import { Route, Switch, Redirect, useHistory } from 'react-router-dom';
 
 import api from "../utils/Api.js";
 import Header from "./Header";
@@ -151,7 +151,7 @@ function handleCathErr(err){
 
 //проверка токена
 function checkToken() {
-  if(localStorage.getItem('token')) {
+  if (localStorage.getItem('token')) {
     const token = localStorage.getItem('token');
     auth.getContent(token)
     .then((res) => {
@@ -175,42 +175,42 @@ function checkToken() {
     history.push('/sign-in')
   }
 
-  function handleUpdateUser(user) {
+  function handleUpdateUser({name, about}) {
     setIsLoading(true);
     api
-      .editUserInfo(user.name, user.about)
-      .then((user) => {
-        setCurrentUser(user);
+      .editUserInfo(name, about)
+      .then((res) => {
+        setCurrentUser(res);
         closeAllPopups();
       })
       .catch((error) => {
-        console.log(error);
+        handleCathErr(error);
       })
       .finally(() => {
         setIsLoading(false);
       });
   }
 
-  function handleUpdateAvatar(url) {
+  function handleUpdateAvatar({avatar}) {
     setIsLoading(true);
     api
-      .editUserAvatar(url.avatar)
-      .then((user) => {
-        setCurrentUser(user);
+      .editUserAvatar(avatar)
+      .then((res) => {
+        setCurrentUser(res);
         closeAllPopups();
       })
       .catch((error) => {
-        console.log(error);
+        handleCathErr(error);
       })
       .finally(() => {
         setIsLoading(false);
       });
   }
 
-  function handleAddPlaceSubmit(card) {
+  function handleAddPlaceSubmit({name, link}) {
     setIsLoading(true);
     api
-      .setNewCard(card.name, card.link)
+      .setNewCard(name, link)
       .then((newCard) => {
         setCards([newCard, ...cards]);
         closeAllPopups();
@@ -224,7 +224,7 @@ function checkToken() {
   }
 
   function handleCardLike(card) {
-    const isLiked = card.likes.some((user) => user._id === currentUser._id);
+    const isLiked = card.likes.some(i => i._id === currentUser._id);
 
     if (!isLiked) {
       api
@@ -274,7 +274,7 @@ function checkToken() {
             exact path="/"
             loggedIn={loggedIn}
             component={Main}
-
+            replace
             onEditProfile={handleEditProfileClick}
             onAddPlace={handleAddPlaceClick}
             onEditAvatar={handleEditAvatarClick}
@@ -283,15 +283,15 @@ function checkToken() {
             onCardLike={handleCardLike}
             onCardDelete={handleCardDelete}
             />
-            <Route 
-            path="/sign-up">
-            <Register onRegister={handleRegister}/>
+            <Route path="/sign-up" replace>
+              <Register onRegister={handleRegister}/>
             </Route>
-            <Route 
-            path="/sign-in">
-            <Login onLogin={handleLogin}/>
+            <Route path="/sign-in" replace>
+              <Login onLogin={handleLogin}/>
             </Route>
-
+            <Route>
+              <Redirect to="/" replace/>
+            </Route>
             <Footer />
            </Switch>
            
